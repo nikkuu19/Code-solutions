@@ -1,0 +1,23 @@
+const long long mod = 1e9+7;
+class Solution {
+    vector<vector<int>> dir = {{1,0}, {0,1}, {-1, 0}, {0, -1}};
+    int dp[50][50][51] = {0};
+    int findPathsUtil(int m, int n, int maxMove, int startRow, int startColumn) {
+        if(min(startRow, startColumn)<0 || startRow>=m || startColumn >= n) {
+            return 1;
+        }
+        if(maxMove == 0) dp[startRow][startColumn][maxMove] = 0;
+        if(dp[startRow][startColumn][maxMove]!=-1) return dp[startRow][startColumn][maxMove];
+        int ans = 0;
+        for(int i=0;i<dir.size();i++) {
+            ans = (ans + findPathsUtil(m,n,maxMove-1, startRow + dir[i][0],startColumn + dir[i][1]))%mod;
+        }
+        dp[startRow][startColumn][maxMove] = ans;
+        return dp[startRow][startColumn][maxMove];
+    }
+public:
+    int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
+        memset(dp, -1, sizeof(dp));
+        return findPathsUtil(m,n,maxMove, startRow,startColumn);
+    }
+};
